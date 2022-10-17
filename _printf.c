@@ -49,8 +49,16 @@ int _printf(const char *format, ...)
 					count += j;
 					write(1, s, j);
 				}
+				else if (*(format + i + 1) == '%')
+				{
+					++i;
+					write(1, "%", 1);
+				}
 				else
-					write(1, (format + i), 1);
+				{
+					write(1, "Error", 5);
+					exit(98);
+				}
 				++i;
 			}
 			else
