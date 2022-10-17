@@ -5,6 +5,11 @@
 
 int chspe(const char *fmt);
 
+/**
+* _printf - print format string
+* @format: format string to use for printing
+* Return: Number of characters printed
+*/
 int _printf(const char *format, ...)
 {
 	unsigned int count, i, j;
