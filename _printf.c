@@ -25,7 +25,7 @@ int _printf(const char *format, ...)
 		while (*(format + i))
 		{
 			if (*(format + i) == '%')
-			{ 
+			{
 				/*++i;*/
 				if (*(format + i + 1) == 'c')
 				{
