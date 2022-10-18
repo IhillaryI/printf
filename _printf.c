@@ -15,6 +15,8 @@ int _printf(const char *format, ...)
 	unsigned int count, i;
 	va_list ap;
 
+	if (format == NULL)
+		return (0);
 	count = 0;
 	va_start(ap, format);
 	i = 0;
