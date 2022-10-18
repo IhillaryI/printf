@@ -1,98 +1,67 @@
 #include <unistd.h>
-#include <stdlib.h>
 #include <stdarg.h>
-#include <stdio.h>
-
-int chspe(const char *fmt);
 
 /**
-* _printf - print format string
-* @format: format string to use for printing
-* Return: Number of characters printed
+* _printf - printf formatted string
+* @format: formatted string
+* Return: count of chars printed
 */
 int _printf(const char *format, ...)
 {
-	unsigned int count, i, j;
+	unsigned int count, i, j, k;
 	char c, *s;
 	va_list ap;
 
 	count = 0;
-	if (!(chspe(format) == -1))
+	va_start(ap, format);
+	i = 0;
+	while (*(format + i))
 	{
-		count = chspe(format);
-		write(1, format, count);
-		return (count);
-	}
-	else
-	{
-		va_start(ap, format);
-		i = 0;
-		while (*(format + i))
+		if (*(format + i) == '%')
 		{
-			if (*(format + i) == '%')
+			j = i + 1;
+			while (*(format + j) == ' ')
+				++j;
+			if (*(format + j) == 's')
 			{
-				/*++i;*/
-				if (*(format + i + 1) == 'c')
-				{
-					++i;
-					++count;
-					c = va_arg(ap, int);
-					write(1, &c, 1);
-				}
-				else if (*(format + i + 1) == 's')
-				{
-					++i;
-					j = 0;
-					s = va_arg(ap, char *);
-					while (*(s + j))
-						++j;
-					count += j;
-					write(1, s, j);
-				}
-				else if (*(format + i + 1) == '%')
-				{
-					++i;
-					write(1, "%", 1);
-				}
-				else
-				{
-					write(1, "Error", 5);
-					exit(98);
-				}
-				++i;
+				s = va_arg(ap, char *);
+				k = 0;
+				while (*(s + k))
+					++k;
+				count += k;
+				write(1, s, k);
+				i = j;
+			}
+			else if (*(format + j) == 'c')
+			{
+				c = va_arg(ap, int);
+				write(1, &c, 1);
+				++count;
+				i = j;
+			}
+			else if (*(format + j) == '%')
+			{
+				write(1, (format + j), 1);
+				i = j;
+				++count;
 			}
 			else
 			{
 				write(1, (format + i), 1);
-				++i;
-				count++;
+				++count;
 			}
+			++i;
 		}
-		va_end(ap);
+		else
+		{
+			count++;
+			write(1, (format + i), 1);
+			++i;
+		}
 	}
+	va_end(ap);
 
 	return (count);
 }
 
-/**
-* chspe - checks if specifier in fmt
-* @fmt: formatted string
-* Return: number of characters if no (%), else return -1;
-*/
-int chspe(const char *fmt)
-{
-	unsigned int i;
 
-	i = 0;
-	while (*(fmt + i))
-	{
-		if (*(fmt + i) == '%')
-		{
-			i = -1;
-			return (i);
-		}
-		++i;
-	}
-
-	return (i);
-}
