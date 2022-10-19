@@ -101,25 +101,36 @@ fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 char *itoa(int value)
 {
 	unsigned int count;
-	int copy;
+	int copy, sign, size;
 	char *str;
 
 	count = 0;
+	sign = 0;
+	if (value == 0)
+		return ("0");
+	if (value < 0)
+	{
+		sign = 1;
+		value *= -1;
+	}
 	copy = value;
 	while (copy)
 	{
 		copy /= 10;
 		++count;
 	}
-	str = malloc(sizeof(char) * (count + 1));
+	size = count + sign;
+	str = malloc(sizeof(char) * (size + 1));
 	if (str != NULL)
 	{
-		str[count] = '\0';
+		str[size] = '\0';
 		while (value)
 		{
-			str[--count] = (value % 10) + '0';
+			str[--size] = (value % 10) + '0';
 			value /= 10;
 		}
+		if (sign)
+			str[0] = '-';
 	}
 	return (str);
 }
@@ -146,3 +157,5 @@ int digit(int value)
 	}
 	return (0);
 }
+
+/*comment for you to delete*/
