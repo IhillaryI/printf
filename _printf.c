@@ -183,15 +183,16 @@ char *itoa(int value)
 		copy /= 10;
 		++count;
 	}
+	copy = value;
 	size = count + sign;
 	str = malloc(sizeof(char) * (size + 1));
 	if (str != NULL)
 	{
 		str[size] = '\0';
-		while (value)
+		while (copy)
 		{
-			str[--size] = (value % 10) + '0';
-			value /= 10;
+			str[--size] = (copy % 10) + '0';
+			copy /= 10;
 		}
 		if (sign)
 			str[0] = '-';
@@ -211,34 +212,26 @@ char *itoa(int value)
 
 int digit(int value)
 {
-
 	char *s;
-
 	int k;
 
-
-
 	k = 0;
-
 	s = itoa(value);
-
 	if (s != NULL)
 	{
-
-		while (*(s + k))
-
+		while (*(s + k) != '\0')
 			++k;
 
 		write(1, s, k);
 
 		free(s);
 
-		return (k);
-
+		if (value == INT_MAX)
+			return (10);
+		else
+			return (k);
 	}
-
 	return (0);
-
 }
 
 
