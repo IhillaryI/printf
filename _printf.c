@@ -222,10 +222,8 @@ int digit(int value)
 		while (*(s + k) != '\0')
 			++k;
 
-		write(1, s, k);
-
+		write(1, s, (value == INT_MAX) ? 10 : k);
 		free(s);
-
 		if (value == INT_MAX)
 			return (10);
 		else
