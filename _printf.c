@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
-
+#include <limits.h>
 
 
 void
@@ -25,10 +25,7 @@ int _printf(const char *format, ...)
 {
 
 	unsigned int count, i;
-
 	va_list ap;
-
-
 
 	if (format == NULL)
 		return (-1);
@@ -36,11 +33,8 @@ int _printf(const char *format, ...)
 		return (-1);
 
 	count = 0;
-
 	va_start(ap, format);
-
 	i = 0;
-
 	while (*(format + i))
 	{
 
@@ -86,21 +80,16 @@ void
 
 fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 {
-
 	char *s, c;
-
 	int j, k;
 
 
-
 	j = *i + 1;
-
 	while (*(fmt + j) == ' ')
 		++j;
 
 	if (*(fmt + j) == 's')
 	{
-
 		s = va_arg(ap, char *);
 		if (s != NULL)
 		{
@@ -120,12 +109,9 @@ fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 		}
 
 		*i = j;
-
-
 	}
 	else if (*(fmt + j) == 'c')
 	{
-
 		c = va_arg(ap, int);
 
 		write(1, &c, 1);
@@ -133,35 +119,27 @@ fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 		++*count;
 
 		*i = j;
-
 	}
 	else if (*(fmt + j) == 'd' || *(fmt + j) == 'i')
 	{
-
 		*count += digit(va_arg(ap, int));
 
 		*i = j;
-
 	}
 	else if (*(fmt + j) == '%')
 	{
-
 		write(1, (fmt + j), 1);
 
 		*i = j;
 
 		++*count;
-
 	}
 	else
 	{
-
 		write(1, (fmt + *i), 1);
 
 		++*count;
-
 	}
-
 }
 
 
@@ -174,67 +152,53 @@ fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 
 char *itoa(int value)
 {
-
 	unsigned int count;
-
-	int copy, sign, size;
-
+	int copy, sign, size, int_min;
 	char *str;
 
-
-
 	count = 0;
-
 	sign = 0;
-
 	if (value == 0)
-		return ("0");
-
-	if (value < 0)
 	{
-
-		sign = 1;
-
-		value *= -1;
-
+		str = malloc(sizeof(char) * 2);
+		str[0] = '0';
+		str[1] = '\0';
+		return (str);
 	}
-
+	else if (value == INT_MIN)
+	{
+		int_min = 1;
+		value += 1;
+		value *= -1;
+		sign = 1;
+	}
+	else if (value < 0)
+	{
+		sign = 1;
+		value *= -1;
+	}
 	copy = value;
-
 	while (copy)
 	{
-
 		copy /= 10;
-
 		++count;
-
 	}
-
 	size = count + sign;
-
 	str = malloc(sizeof(char) * (size + 1));
-
 	if (str != NULL)
 	{
-
 		str[size] = '\0';
-
 		while (value)
 		{
-
 			str[--size] = (value % 10) + '0';
-
 			value /= 10;
-
 		}
-
 		if (sign)
 			str[0] = '-';
-
+		if (int_min)
+			str[10] = str[10] + 1;
 	}
-
 	return (str);
-
 }
 
 
