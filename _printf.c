@@ -12,6 +12,7 @@ char *itoa(int value);
 
 int digit(int value);
 
+unsigned int len(const char *s);
 
 
 /**
@@ -30,6 +31,8 @@ int _printf(const char *format, ...)
 
 
 	if (format == NULL)
+		return (-1);
+	if (len(format) == 1 && *(format) == '%')
 		return (-1);
 
 	count = 0;
@@ -274,3 +277,18 @@ int digit(int value)
 
 }
 
+
+/**
+* len - count the length of a string
+* @s: string to count
+* Return: length of string
+*/
+unsigned int len(const char *s)
+{
+	unsinged int i;
+
+	i = 0;
+	while (*(s + i))
+		++i;
+	return (i);
+}
