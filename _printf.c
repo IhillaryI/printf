@@ -285,8 +285,8 @@ int digit(int value)
 */
 unsigned int len(const char *s)
 {
-	unsinged int i;
-
+	unsigned int i;
+/* previously made an error here */
 	i = 0;
 	while (*(s + i))
 		++i;
