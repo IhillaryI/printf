@@ -1,15 +1,11 @@
 #include <unistd.h>
-
 #include <stdio.h>
-
 #include <stdarg.h>
-
 #include <stdlib.h>
 
 
 
 void
-
 fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count);
 
 char *itoa(int value);
@@ -25,7 +21,6 @@ int digit(int value);
 */
 
 int _printf(const char *format, ...)
-
 {
 
 	unsigned int count, i;
@@ -45,11 +40,9 @@ int _printf(const char *format, ...)
 	i = 0;
 
 	while (*(format + i))
-
 	{
 
 		if (*(format + i) == '%')
-
 		{
 
 			fmt_spec(ap, format, &i, &count);
@@ -57,9 +50,7 @@ int _printf(const char *format, ...)
 			++i;
 
 		}
-
 		else
-
 		{
 
 			count++;
@@ -89,11 +80,9 @@ int _printf(const char *format, ...)
 * @i: unsigned int
 * @count: unsigned int
 */
-
 void
 
 fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
-
 {
 
 	char *s, c;
@@ -105,31 +94,34 @@ fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 	j = *i + 1;
 
 	while (*(fmt + j) == ' ')
-
 		++j;
 
 	if (*(fmt + j) == 's')
-
 	{
 
 		s = va_arg(ap, char *);
+		if (s != NULL)
+		{
+			k = 0;
 
-		k = 0;
+			while (*(s + k))
+				++k;
+			*count += k;
 
-		while (*(s + k))
+			write(1, s, k);
 
-			++k;
-
-		*count += k;
-
-		write(1, s, k);
+		}
+		else
+		{
+			*count += 6;
+			write(1, "(null)", 6);
+		}
 
 		*i = j;
 
+
 	}
-
 	else if (*(fmt + j) == 'c')
-
 	{
 
 		c = va_arg(ap, int);
@@ -141,9 +133,7 @@ fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 		*i = j;
 
 	}
-
 	else if (*(fmt + j) == 'd' || *(fmt + j) == 'i')
-
 	{
 
 		*count += digit(va_arg(ap, int));
@@ -151,9 +141,7 @@ fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 		*i = j;
 
 	}
-
 	else if (*(fmt + j) == '%')
-
 	{
 
 		write(1, (fmt + j), 1);
@@ -163,9 +151,7 @@ fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 		++*count;
 
 	}
-
 	else
-
 	{
 
 		write(1, (fmt + *i), 1);
@@ -185,7 +171,6 @@ fmt_spec(va_list ap, const char *fmt, unsigned int *i, unsigned int *count)
 */
 
 char *itoa(int value)
-
 {
 
 	unsigned int count;
@@ -201,11 +186,9 @@ char *itoa(int value)
 	sign = 0;
 
 	if (value == 0)
-
 		return ("0");
 
 	if (value < 0)
-
 	{
 
 		sign = 1;
@@ -217,7 +200,6 @@ char *itoa(int value)
 	copy = value;
 
 	while (copy)
-
 	{
 
 		copy /= 10;
@@ -231,13 +213,11 @@ char *itoa(int value)
 	str = malloc(sizeof(char) * (size + 1));
 
 	if (str != NULL)
-
 	{
 
 		str[size] = '\0';
 
 		while (value)
-
 		{
 
 			str[--size] = (value % 10) + '0';
@@ -247,7 +227,6 @@ char *itoa(int value)
 		}
 
 		if (sign)
-
 			str[0] = '-';
 
 	}
@@ -265,7 +244,6 @@ char *itoa(int value)
 */
 
 int digit(int value)
-
 {
 
 	char *s;
@@ -279,7 +257,6 @@ int digit(int value)
 	s = itoa(value);
 
 	if (s != NULL)
-
 	{
 
 		while (*(s + k))
@@ -297,5 +274,4 @@ int digit(int value)
 	return (0);
 
 }
-
 
